@@ -1,4 +1,6 @@
 ﻿using System.Windows;
+using PieLineFunc.Model;
+using PieLineFunc.Utils;
 using PieLineFunc.ViewModels;
 
 namespace PieLineFunc
@@ -14,7 +16,8 @@ namespace PieLineFunc
         {
             var window = new MainWindow();
 
-            var viewModel = new MainViewModel();
+            var model = new ContainerGraphics(new SerializerXml(), new OpenFileWindow(), new SaveFileWindow());
+            var viewModel = new MainViewModel(model);
             window.DataContext = viewModel;
             window.ShowDialog();
         }

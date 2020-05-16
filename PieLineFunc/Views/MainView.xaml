@@ -1,12 +1,76 @@
-﻿<UserControl x:Class="PieLineFunc.Views.MainView"
-             xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
-             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
-             xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
-             xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
-             xmlns:local="clr-namespace:PieLineFunc.Views"
-             mc:Ignorable="d" 
-             d:DesignHeight="450" d:DesignWidth="800">
+﻿<UserControl
+    x:Class="PieLineFunc.Views.MainView"
+    xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+    xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+    xmlns:controls="clr-namespace:PieLineFunc.Controls"
+    xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+    xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+    xmlns:viewModels="clr-namespace:PieLineFunc.ViewModels"
+    xmlns:wpf="clr-namespace:LiveCharts.Wpf;assembly=LiveCharts.Wpf"
+    d:DataContext="{d:DesignInstance viewModels:MainViewModel}"
+    d:DesignHeight="450"
+    d:DesignWidth="800"
+    mc:Ignorable="d">
+    <UserControl.Resources />
     <Grid>
-            
+        <Grid.RowDefinitions>
+            <RowDefinition Height="Auto" />
+            <RowDefinition />
+            <RowDefinition />
+        </Grid.RowDefinitions>
+
+        <Menu>
+            <MenuItem Header="Файл">
+                <MenuItem Command="{Binding ImportCommand}" Header="Импортировать графики" />
+                <MenuItem Command="{Binding ExportCommand}" Header="Экспортировать графики" />
+            </MenuItem>
+        </Menu>
+
+        <Grid Grid.Row="1" DataContext="{Binding SelectedGraphic}">
+            <wpf:CartesianChart DisableAnimations="True">
+                <wpf:CartesianChart.Series>
+                    <wpf:LineSeries Values="{Binding Points}" />
+                </wpf:CartesianChart.Series>
+            </wpf:CartesianChart>
+        </Grid>
+
+        <Grid Grid.Row="2">
+            <Grid.ColumnDefinitions>
+                <ColumnDefinition Width="42" />
+                <ColumnDefinition />
+            </Grid.ColumnDefinitions>
+            <controls:TabControlAdvanced
+                Grid.Column="1"
+                AddItemCommand="{Binding AddGraphicCommand}"
+                ItemsSource="{Binding Graphics}"
+                SelectedItem="{Binding SelectedGraphic, Mode=OneWayToSource}"
+                Style="{DynamicResource TabControlStyle1}">
+                <controls:TabControlAdvanced.ItemTemplate>
+                    <DataTemplate DataType="{x:Type viewModels:GraphicViewModel}">
+                        <Grid MaxWidth="142">
+                            <Grid.ColumnDefinitions>
+                                <ColumnDefinition />
+                                <ColumnDefinition />
+                            </Grid.ColumnDefinitions>
+                            <TextBlock Text="{Binding NameGraphic}" />
+                            <Button
+                                Grid.Column="1"
+                                Command="{Binding RelativeSource={RelativeSource Mode=FindAncestor, AncestorType=UserControl}, Path=DataContext.DeleteGraphicCommand}"
+                                CommandParameter="{Binding}"
+                                Content="X" />
+                        </Grid>
+                    </DataTemplate>
+                </controls:TabControlAdvanced.ItemTemplate>
+                <TabControl.ContentTemplate>
+                    <DataTemplate DataType="{x:Type viewModels:GraphicViewModel}">
+                        <DataGrid ItemsSource="{Binding Table}" CanUserAddRows="False" />
+                    </DataTemplate>
+                </TabControl.ContentTemplate>
+            </controls:TabControlAdvanced>
+            <StackPanel Grid.Column="0" DataContext="{Binding SelectedGraphic}" >
+                <Button Content="Add" Command="{Binding AddPointCommand}"></Button>
+            </StackPanel>
+        </Grid>
+
     </Grid>
 </UserControl>
