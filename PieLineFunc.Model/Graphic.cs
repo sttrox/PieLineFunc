@@ -48,7 +48,9 @@ namespace PieLineFunc.Model
         //         }
         //     }
         // }
+        public void RemovePoint(ObservablePoint selectedPoint)
         {
+            Points.Remove(selectedPoint);
         }
     }
 }

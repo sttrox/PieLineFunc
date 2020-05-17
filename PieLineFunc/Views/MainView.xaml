@@ -4,6 +4,7 @@
     xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
     xmlns:controls="clr-namespace:PieLineFunc.Controls"
     xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+    xmlns:defaults="clr-namespace:LiveCharts.Defaults;assembly=LiveCharts"
     xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
     xmlns:viewModels="clr-namespace:PieLineFunc.ViewModels"
     xmlns:wpf="clr-namespace:LiveCharts.Wpf;assembly=LiveCharts.Wpf"
@@ -36,15 +37,15 @@
 
         <Grid Grid.Row="2">
             <Grid.ColumnDefinitions>
-                <ColumnDefinition Width="42" />
+                <ColumnDefinition Width="44" />
                 <ColumnDefinition />
             </Grid.ColumnDefinitions>
             <controls:TabControlAdvanced
                 Grid.Column="1"
                 AddItemCommand="{Binding AddGraphicCommand}"
                 ItemsSource="{Binding Graphics}"
-                SelectedItem="{Binding SelectedGraphic, Mode=OneWayToSource}"
-                Style="{DynamicResource TabControlStyle1}">
+                SelectedIndex="0"
+                SelectedItem="{Binding SelectedGraphic, Mode=OneWayToSource}">
                 <controls:TabControlAdvanced.ItemTemplate>
                     <DataTemplate DataType="{x:Type viewModels:GraphicViewModel}">
                         <Grid MaxWidth="142">
@@ -70,6 +71,7 @@
                             AutoGenerateColumns="False"
                             CanUserAddRows="False"
                             ItemsSource="{Binding Points}"
+                            SelectedValue="{Binding SelectedPoint}">
                             <DataGrid.Columns>
                                 <DataGridTextColumn Binding="{Binding X}" />
                                 <DataGridTextColumn Binding="{Binding Y}" />
@@ -78,8 +80,16 @@
                     </DataTemplate>
                 </TabControl.ContentTemplate>
             </controls:TabControlAdvanced>
-            <StackPanel Grid.Column="0" DataContext="{Binding SelectedGraphic}" >
-                <Button Content="Add" Command="{Binding AddPointCommand}"></Button>
+            <StackPanel
+                Grid.Column="0"
+                DataContext="{Binding SelectedGraphic}"
+                TextBlock.TextAlignment="Center">
+                <Button Height="Auto" Command="{Binding AddPointCommand}">
+                    <TextBlock Text="Add Point" TextWrapping="Wrap" />
+                </Button>
+                <Button Height="Auto" Command="{Binding DeletePointCommand}">
+                    <TextBlock Text="Delete Point" TextWrapping="Wrap" />
+                </Button>
             </StackPanel>
         </Grid>
 

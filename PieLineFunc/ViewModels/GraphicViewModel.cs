@@ -58,5 +58,44 @@ namespace PieLineFunc.ViewModels
         }
 
         #endregion
+
+
+        #region Command DeletePoint(RelayCommand)
+
+        private ICommand _deletePointCommand;
+
+        public ICommand DeletePointCommand
+            => _deletePointCommand ?? (_deletePointCommand =
+                   new RelayCommand(DeletePointCommand_Execute, DeletePointCommand_CanExecute));
+
+
+        private bool DeletePointCommand_CanExecute(object arg)
+        {
+            return SelectedPoint != null;
+        }
+
+        private void DeletePointCommand_Execute(object parameter)
+        {
+            _graphic.RemovePoint(SelectedPoint);
+        }
+
+        #endregion
+
+
+        #region Property SelectedPoint(ObservablePoint)
+
+        private ObservablePoint _selectedPoint;
+
+        public ObservablePoint SelectedPoint
+        {
+            get { return _selectedPoint; }
+            set
+            {
+                _selectedPoint = value;
+                OnPropertyChanged(nameof(SelectedPoint));
+            }
+        }
+
+        #endregion
     }
 }
