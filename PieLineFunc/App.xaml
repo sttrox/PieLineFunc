@@ -5,7 +5,16 @@
     xmlns:local="clr-namespace:PieLineFunc"
     StartupUri="MainWindow.xaml">
     <Application.Resources>
-        <ResourceDictionary Source="pack://application:,,,/PieLineFunc;component/Views/MappingViews.xaml" />
+        <ResourceDictionary>
+            <ResourceDictionary.MergedDictionaries>
+                <ResourceDictionary Source="pack://application:,,,/PieLineFunc;component/Views/MappingViews.xaml" />
+            </ResourceDictionary.MergedDictionaries>
+            <Style BasedOn="{StaticResource {x:Type TextBlock}}" TargetType="{x:Type TextBlock}">
+                <Style.Setters>
+                    <Setter Property="FontFamily" Value="Century Gothic" />
+                </Style.Setters>
+            </Style>
+        </ResourceDictionary>
 
     </Application.Resources>
 </Application>
