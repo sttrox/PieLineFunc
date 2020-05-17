@@ -63,7 +63,18 @@
                 </controls:TabControlAdvanced.ItemTemplate>
                 <TabControl.ContentTemplate>
                     <DataTemplate DataType="{x:Type viewModels:GraphicViewModel}">
-                        <DataGrid ItemsSource="{Binding Table}" CanUserAddRows="False" />
+                        <!--  Table  -->
+                        <DataGrid
+                            d:DesignSource="{d:DesignInstance Type={x:Type defaults:ObservablePoint},
+                                                              CreateList=True}"
+                            AutoGenerateColumns="False"
+                            CanUserAddRows="False"
+                            ItemsSource="{Binding Points}"
+                            <DataGrid.Columns>
+                                <DataGridTextColumn Binding="{Binding X}" />
+                                <DataGridTextColumn Binding="{Binding Y}" />
+                            </DataGrid.Columns>
+                        </DataGrid>
                     </DataTemplate>
                 </TabControl.ContentTemplate>
             </controls:TabControlAdvanced>

@@ -18,16 +18,10 @@ namespace PieLineFunc.ViewModels
 
         private readonly Graphic _graphic;
 
-        #region Property Table(DataTable)
-
-        public DataTable Table => _graphic.Table;
-
-        #endregion
-
 
         #region Property Points(ObservableCollection<ObservablePoint>)
 
-        public ObservableCollection<ObservablePoint> Points => 
+        public ObservableCollection<ObservablePoint> Points =>
             _graphic.Points;
 
         #endregion
