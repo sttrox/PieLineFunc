@@ -11,13 +11,15 @@ namespace PieLineFunc.Model
         private ISerialized _serializable;
         private readonly IOpenFileWindow _openFileWindow;
         private readonly ISaveFileWindow _saveFileWindow;
+        private readonly IClipboard _clipboard;
 
         public ContainerGraphics(ISerialized serializable, IOpenFileWindow openFileWindow,
-            ISaveFileWindow saveFileWindow)
+            ISaveFileWindow saveFileWindow, IClipboard clipboard)
         {
             _serializable = serializable;
             _openFileWindow = openFileWindow;
             _saveFileWindow = saveFileWindow;
+            _clipboard = clipboard;
 
             Graphics = new List<Graphic>();
             CreateGraphic();
@@ -52,7 +54,8 @@ namespace PieLineFunc.Model
         public void Import()
         {
             var path = _openFileWindow.GetPath();
-            Graphics = _serializable.Deserialized<List<GraphicDto>>(path).Select(dto => new Graphic(dto)).ToList();
+            Graphics = _serializable.Deserialized<List<GraphicDto>>(path).Select(dto => new Graphic(dto, _clipboard))
+                .ToList();
         }
 
         public void Export()
@@ -70,7 +73,7 @@ namespace PieLineFunc.Model
 
         public void CreateGraphic()
         {
-            Graphics.Add(new Graphic(new GraphicDto("График " + Graphics.Count)));
+            Graphics.Add(new Graphic("График " + Graphics.Count, _clipboard));
             RaiseGraphics(Graphics);
         }
     }

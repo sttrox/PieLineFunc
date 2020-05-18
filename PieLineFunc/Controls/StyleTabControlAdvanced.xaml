@@ -30,22 +30,24 @@
                             <RowDefinition x:Name="RowDefinition0" Height="Auto" />
                             <RowDefinition x:Name="RowDefinition1" Height="*" />
                         </Grid.RowDefinitions>
-                        <StackPanel
-                            Grid.Row="0"
-                            Grid.Column="0"
-                            Orientation="Horizontal">
-                            <TabPanel
-                                x:Name="headerPanel"
-                                Margin="2,2,2,0"
-                                Panel.ZIndex="1"
-                                Background="Transparent"
-                                IsItemsHost="true"
-                                KeyboardNavigation.TabIndex="1" />
-                            <Button
-                                Width="32"
-                                Command="{TemplateBinding AddItemCommand}"
-                                Content="+" />
-                        </StackPanel>
+                        <ScrollViewer HorizontalScrollBarVisibility="Auto" VerticalScrollBarVisibility="Disabled">
+                            <StackPanel
+                                Grid.Row="0"
+                                Grid.Column="0"
+                                Orientation="Horizontal">
+                                <TabPanel
+                                    x:Name="headerPanel"
+                                    Margin="2,2,2,0"
+                                    Panel.ZIndex="1"
+                                    Background="Transparent"
+                                    IsItemsHost="true"
+                                    KeyboardNavigation.TabIndex="1" />
+                                <Button
+                                    Width="32"
+                                    Command="{TemplateBinding AddItemCommand}"
+                                    Content="+" />
+                            </StackPanel>
+                        </ScrollViewer>
                         <Border
                             x:Name="contentPanel"
                             Grid.Row="1"

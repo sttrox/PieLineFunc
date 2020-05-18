@@ -1,7 +1,7 @@
-﻿using System.Collections.ObjectModel;
+﻿using System;
 using System.Collections.Specialized;
-using System.Data;
 using System.Windows.Input;
+using LiveCharts;
 using LiveCharts.Defaults;
 using PieLineFunc.Common;
 using PieLineFunc.Model;
@@ -13,6 +13,30 @@ namespace PieLineFunc.ViewModels
         public GraphicViewModel(Graphic graphic)
         {
             _graphic = graphic;
+            _graphic.Points.CollectionChanged += PointsOnCollectionChanged;
+            Points = new ChartValues<ObservablePoint>(_graphic.Points);
+        }
+
+        private void PointsOnCollectionChanged(object sender, NotifyCollectionChangedEventArgs e)
+        {
+            if (e.Action == NotifyCollectionChangedAction.Add)
+            {
+                foreach (ObservablePoint item in e.NewItems)
+                    Points.Add(item);
+            }
+            else if (e.Action == NotifyCollectionChangedAction.Remove)
+            {
+                foreach (ObservablePoint item in e.OldItems)
+                    Points.Remove(item);
+            }
+            else if (e.Action == NotifyCollectionChangedAction.Reset)
+            {
+                Points.Clear();
+            }
+            else
+            {
+                throw new NotImplementedException("Func don't implemented");
+            }
         }
 
 
@@ -21,8 +45,7 @@ namespace PieLineFunc.ViewModels
 
         #region Property Points(ObservableCollection<ObservablePoint>)
 
-        public ObservableCollection<ObservablePoint> Points =>
-            _graphic.Points;
+        public ChartValues<ObservablePoint> Points { get; }
 
         #endregion
 
@@ -54,7 +77,7 @@ namespace PieLineFunc.ViewModels
 
         private void AddPointCommand_Execute(object parameter)
         {
-            Points.Add(new ObservablePoint(0, 0));
+            _graphic.AddNewPoint();
         }
 
         #endregion
@@ -71,6 +94,8 @@ namespace PieLineFunc.ViewModels
 
         private bool DeletePointCommand_CanExecute(object arg)
         {
+            var p = this.GetHashCode().ToString("X");
+
             return SelectedPoint != null;
         }
 
@@ -91,11 +116,22 @@ namespace PieLineFunc.ViewModels
             get { return _selectedPoint; }
             set
             {
+                var p = this.GetHashCode().ToString("X");
                 _selectedPoint = value;
                 OnPropertyChanged(nameof(SelectedPoint));
             }
         }
 
         #endregion
+
+        public void CopyToExcel()
+        {
+            _graphic.CopyToClipboardForExcel();
+        }
+
+        public void CopyFromExcel()
+        {
+            _graphic.InsertPointsFromExcelByClipboard();
+        }
     }
 }

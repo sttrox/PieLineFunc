@@ -9,25 +9,18 @@ namespace PieLineFunc.Model.Dto
 {
     public class GraphicDto
     {
-        private List<ObservablePoint> _points;
-        private string _name;
+        public GraphicDto()
+        {
+        }
 
         public GraphicDto(string name)
         {
-            _name = name;
-            _points = new List<ObservablePoint>();
+            Name = name;
+            Points = new List<ObservablePoint>();
         }
 
-        public List<ObservablePoint> Points
-        {
-            get { return _points; }
-            set { _points = value; }
-        }
+        public List<ObservablePoint> Points { get; set; }
 
-        public string Name
-        {
-            get { return _name; }
-            set { _name = value; }
-        }
+        public string Name { get; set; }
     }
 }

@@ -13,14 +13,24 @@ namespace PieLineFunc.ViewModels
         public MainViewModel(ContainerGraphics containerGraphics)
         {
             _containerGraphics = containerGraphics;
-            _containerGraphics.ChangeGraphics += (sender, list) => OnPropertyChanged(nameof(Graphics));
+            _containerGraphics.ChangeGraphics += (sender, list) => { ReCreateGraphics(list); };
+            ReCreateGraphics(_containerGraphics.Graphics);
         }
 
 
         #region Property Graphics(List<GraphicViewModel>)
 
-        public List<GraphicViewModel> Graphics =>
-            _containerGraphics.Graphics.Select(graphic => new GraphicViewModel(graphic)).ToList();
+        private List<GraphicViewModel> _graphics;
+
+        public List<GraphicViewModel> Graphics
+        {
+            get { return _graphics; }
+            set
+            {
+                _graphics = value;
+                OnPropertyChanged(nameof(Graphics));
+            }
+        }
 
         #endregion
 
@@ -55,17 +65,8 @@ namespace PieLineFunc.ViewModels
 
         #region Property SelectedGraphic(GraphicViewModel)
 
-        private GraphicViewModel _selectedGraphic;
-
         public GraphicViewModel SelectedGraphic
-        {
-            get { return _selectedGraphic; }
-            set
-            {
-                _selectedGraphic = value;
-                OnPropertyChanged(nameof(SelectedGraphic));
-            }
-        }
+            => Graphics[SelectedIndex];
 
         #endregion
 
@@ -95,6 +96,23 @@ namespace PieLineFunc.ViewModels
         #endregion
 
 
+        #region Property SelectedIndex(int)
+
+        private int _selectedIndex;
+
+        public int SelectedIndex
+        {
+            get { return _selectedIndex; }
+            set
+            {
+                _selectedIndex = value;
+                OnPropertyChanged(nameof(SelectedIndex));
+                OnPropertyChanged(nameof(SelectedGraphic));
+            }
+        }
+
+        #endregion
+
         #region Command AddGraphic(RelayCommand)
 
         private ICommand _addGraphicCommand;
@@ -102,11 +120,49 @@ namespace PieLineFunc.ViewModels
         public ICommand AddGraphicCommand
             => _addGraphicCommand ?? (_addGraphicCommand = new RelayCommand(AddGraphicCommand_Execute));
 
+
         private void AddGraphicCommand_Execute(object parameter)
         {
             _containerGraphics.CreateGraphic();
+            SelectedIndex = Graphics.Count - 1;
         }
 
         #endregion
+
+        #region Command CopyToExcelCommand(RelayCommand)
+
+        private ICommand _copyToExcelCommandCommand;
+
+        public ICommand CopyToExcelCommand
+            => _copyToExcelCommandCommand ??
+               (_copyToExcelCommandCommand = new RelayCommand(CopyToExcelCommandCommand_Execute));
+
+        private void CopyToExcelCommandCommand_Execute(object parameter)
+        {
+            SelectedGraphic.CopyToExcel();
+        }
+
+        #endregion
+
+
+        #region Command InsertFromExcelCommand(RelayCommand)
+
+        private ICommand _insertFromExcelCommandCommand;
+
+        public ICommand InsertFromExcelCommand
+            => _insertFromExcelCommandCommand ?? (_insertFromExcelCommandCommand =
+                   new RelayCommand(InsertFromExcelCommandCommand_Execute));
+
+        private void InsertFromExcelCommandCommand_Execute(object parameter)
+        {
+            SelectedGraphic.CopyFromExcel();
+        }
+
+        #endregion
+
+        private void ReCreateGraphics(List<Graphic> list)
+        {
+            Graphics = list.Select(graphic => new GraphicViewModel(graphic)).ToList();
+        }
     }
 }

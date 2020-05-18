@@ -16,7 +16,8 @@ namespace PieLineFunc
         {
             var window = new MainWindow();
 
-            var model = new ContainerGraphics(new SerializerXml(), new OpenFileWindow(), new SaveFileWindow());
+            var model = new ContainerGraphics(new SerializerXml(), new OpenFileWindow(), new SaveFileWindow(),
+                new ClipboardInstance());
             var viewModel = new MainViewModel(model);
             window.DataContext = viewModel;
             window.ShowDialog();
