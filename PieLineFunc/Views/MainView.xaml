@@ -49,11 +49,18 @@
         </Menu>
 
         <Grid Grid.Row="1" DataContext="{Binding SelectedGraphic}">
+            <Grid.RowDefinitions>
+                <RowDefinition Height="Auto" />
+                <RowDefinition />
+            </Grid.RowDefinitions>
             <Grid.ColumnDefinitions>
                 <ColumnDefinition Width="55" />
                 <ColumnDefinition />
             </Grid.ColumnDefinitions>
-            <StackPanel Background="#FAFAFA" Orientation="Vertical">
+            <StackPanel
+                Grid.RowSpan="2"
+                Background="#FAFAFA"
+                Orientation="Vertical">
 
                 <!--#region Point Config-->
                 <TextBlock Style="{StaticResource Style.TextBlock.HeaderBlock}">
@@ -94,8 +101,15 @@
                     Content="Zoom" />
                 <!--#endregion-->
             </StackPanel>
-
-            <wpf:CartesianChart Grid.Column="1" DisableAnimations="True">
+            <TextBlock
+                Grid.Row="0"
+                Grid.Column="1"
+                Style="{StaticResource Style.TextBlock.HeaderBlock}"
+                Text="{Binding NameGraphic}" />
+            <wpf:CartesianChart
+                Grid.Row="1"
+                Grid.Column="1"
+                DisableAnimations="True">
                 <wpf:CartesianChart.Zoom>
                     <Binding ElementName="CheckBoxIsZoom" Path="IsChecked">
                         <Binding.Converter>
@@ -146,10 +160,11 @@
                                 <ColumnDefinition />
                                 <ColumnDefinition />
                             </Grid.ColumnDefinitions>
-                            <TextBlock Text="{Binding NameGraphic}"  Margin="5,0"/>
+                            <TextBlock Margin="5,0" Text="{Binding NameGraphic}" />
                             <Button
-                                Width="18" Height="18"
                                 Grid.Column="1"
+                                Width="18"
+                                Height="18"
                                 Command="{Binding RelativeSource={RelativeSource Mode=FindAncestor, AncestorType=UserControl}, Path=DataContext.DeleteGraphicCommand}"
                                 CommandParameter="{Binding}"
                                 Content="X" />
