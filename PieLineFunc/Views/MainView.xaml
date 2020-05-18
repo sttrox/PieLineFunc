@@ -138,7 +138,7 @@
                     <wpf:Axis Title="Y" />
                 </wpf:CartesianChart.AxisY>
                 <wpf:CartesianChart.Series>
-                    <wpf:LineSeries Values="{Binding Points}" />
+                    <wpf:LineSeries LineSmoothness="0" Values="{Binding Points}" />
                 </wpf:CartesianChart.Series>
             </wpf:CartesianChart>
         </Grid>
